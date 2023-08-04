@@ -2,6 +2,8 @@ const client =  require('../../config/database.js');
 
 console.log('Applying schema...')
 
+let coll;
+
 async function run() {
   try {
     await client.connect();
@@ -55,13 +57,16 @@ async function run() {
   }
 
 
-    const coll = db.collection('BillingCycle');
+    coll = db.collection('BillingCycle');
     await coll.createIndex({ name: 1 }, { unique: true });
   
     console.log('Schema applied successfully');
+
+    return coll; // Retorna a coleção
+
   } finally {
-    await client.close();
+    // await client.close();
   }
 }
 
-run().catch(console.dir);
+module.exports = run // Exporta a função run

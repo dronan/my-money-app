@@ -9,6 +9,10 @@ module.exports = function(server) {
   // BillingCycle Routes
   router.get('/billingCycles', billingCycleService.get);
   router.post('/billingCycles', billingCycleService.post);
-  router.put('/billingCycles', billingCycleService.put);
+  router.put('/billingCycles/:id', billingCycleService.put);
   router.delete('/billingCycles/:id', billingCycleService.delete);
+
+  // Adicione as novas rotas para count e summary
+  router.get('/billingCycles/count', billingCycleService.count);
+  router.get('/billingCycles/summary', billingCycleService.summary);
 };
