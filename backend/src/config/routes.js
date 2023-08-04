@@ -12,7 +12,7 @@ module.exports = function(server) {
   router.put('/billingCycles/:id', billingCycleService.put);
   router.delete('/billingCycles/:id', billingCycleService.delete);
 
-  // Adicione as novas rotas para count e summary
+  // get to count billingCycles and summary
   router.get('/billingCycles/count', billingCycleService.count);
   router.get('/billingCycles/summary', billingCycleService.summary);
 };
