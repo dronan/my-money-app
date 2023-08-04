@@ -1,5 +1,19 @@
-const mongoose = require('mongoose')
-mongoose.Promise = global.Promise
-module.exports = mongoose.connect('mongodb://localhost/mymoney')
+const { MongoClient } = require('mongodb');
+const uri = 'mongodb://localhost/mymoney';
+console.log('db.js ...')
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-mongoose.Error.messages.general.required = "The attribute '{PATH}' is required."
+async function connect() {
+  try {
+    await client.connect();
+    console.log('Connected successfully to server');
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+connect();
+
+
+module.exports = client;
