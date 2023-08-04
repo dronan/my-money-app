@@ -11,3 +11,6 @@ server.listen(port, () => {
     console.log(`Backend is running on port ${port}...`);
     }
 );
+
+// export server to use as parameter in loader.js
+module.exports = server;
