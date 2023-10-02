@@ -22,6 +22,7 @@ async function get(req, res, next) {
 // Rote to insert a billing cycle
 async function post(req, res, next) {
     try {
+        console.log(req.body)
         const result = await coll.insertOne(req.body);
         if (result.acknowledged) {
             const insertedDocument = await coll.findOne({ _id: result.insertedId });
@@ -79,18 +80,34 @@ async function count(req, res, next) {
   
 // Route to the summary of credits and debts
 async function summary(req, res, next) {
-    try {
+  try {
       const result = await coll.aggregate([
-        { $project: { credit: { $sum: "$credits.value" }, debt: { $sum: "$debts.value" } } },
-        { $group: { _id: null, credit: { $sum: "$credit" }, debt: { $sum: "$debt" } } },
-        { $project: { _id: 0, credit: 1, debt: 1 } }
+          { $unwind: '$credits' },
+          { $unwind: '$debts' },
+          {
+              $group: {
+                  _id: null,
+                  totalCredit: { $sum: '$credits.value' },
+                  totalDebt: { $sum: '$debts.value' }
+              }
+          },
+          {
+              $project: {
+                  _id: 0,
+                  credit: '$totalCredit',
+                  debt: '$totalDebt'
+              }
+          }
       ]).toArray();
-  
+
       res.json(result[0] || { credit: 0, debt: 0 });
-    } catch (error) {
+
+  } catch (error) {
+      console.log(error); // For debugging
       res.status(500).json({ errors: [error] });
-    }
   }
+}
+
   
 
 module.exports = { get, post, put, delete: deleteMethod, count, summary };
