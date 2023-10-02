@@ -6,7 +6,8 @@ import App from './main/app'
 import reducers from './main/reducers'
 import promise from 'redux-promise'
 
-const store = applyMiddleware(promise)(createStore)(reducers)
+const devtools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+const store = applyMiddleware(promise)(createStore)(reducers, devtools)
 
 ReactDOM.render(
 <Provider store={store}>
