@@ -1,6 +1,6 @@
-import conbineReducers from 'redux';
+import { combineReducers } from 'redux';
 
-const rootReducer = conbineReducers({
+const rootReducer = combineReducers({
     dashboard: () => ({summary: {credit: 100, debt: 50}})
 });
 
