@@ -1,4 +1,5 @@
 const getCollection = require('./billingCycle');
+const parseMongoError = require('../errorHandler/error');
 const ObjectId = require('mongodb').ObjectId;
 
 // Local variable to store the collection
@@ -19,6 +20,7 @@ async function get(req, res, next) {
     }
   }
 
+
 // Rote to insert a billing cycle
 async function post(req, res, next) {
     try {
@@ -31,7 +33,8 @@ async function post(req, res, next) {
             throw new Error('Falha na inserção');
         }
     } catch (error) {
-        res.status(500).json({ errors: [error] });
+      const parsedError = parseMongoError(error);
+      res.status(500).json(parsedError);
     }
 }
 
