@@ -12,6 +12,8 @@ module.exports = function parseMongoError(error) {
                     
                     if(prop.details[0]?.consideredValue == null){
                       msgerror = "Missing required data on field " + prop.propertyName
+                    } else if (prop.details[0]?.reason == "comparison failed") {
+                      msgerror = "Unexpected value for the field " + prop.propertyName
                     } else {
                       msgerror = prop.details[0]?.reason == "type did not match on field " + prop.propertyName ? "Invalid data type on field " + prop.propertyName : prop.details[0]?.reason
                     }
