@@ -8,3 +8,16 @@ export function getList() {
         payload: request
     }
 }
+
+export function create(values) {
+    
+    values.month  = parseInt(values[key], 10);
+    values.year = parseInt(values[key], 10);
+    values.debts = []
+    values.credits = []
+
+    axios.post(`${BASE_URL}/billingCycles`, values)
+    return {
+        type: 'TEMP'
+    }
+}
