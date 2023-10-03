@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Grid from '../common/layout/grid'
 import { Field } from 'redux-form'
 import Input from '../common/form/input'
+import { parseNumber, formatNumber } from '../common/form/formHelpers'
 
 class CreditList extends Component {
 
@@ -11,7 +12,8 @@ class CreditList extends Component {
                 <td><Field name="credits[0].name" component={Input}
                 placeholder='Insert the name' readOnly={this.props.readOnly} /></td>
                 <td><Field name="credits[0].value" component={Input}
-                placeholder='Insert the value' readOnly={this.props.readOnly} /></td>
+                placeholder='Insert the value' readOnly={this.props.readOnly} 
+                parse={parseNumber} format={formatNumber} /></td>
                 <td>
                 
                 </td>

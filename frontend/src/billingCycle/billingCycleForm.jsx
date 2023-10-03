@@ -7,6 +7,8 @@ import { init } from "./billingCycleActions";
 
 import labelAndInput from "../common/form/labelAndInput";
 import CreditList from "./creditList";
+import { parseNumber, formatNumber } from '../common/form/formHelpers'
+
 class BillingCycleForm extends Component {
   render() {
 
@@ -21,9 +23,11 @@ class BillingCycleForm extends Component {
             />
             <Field name="month" component={labelAndInput}  readOnly={readOnly} type="number"
               label="Month" cols="12 4" placeholder="Enter the month"
+              parse={parseNumber} format={formatNumber}
             />
             <Field name="year" component={labelAndInput}  readOnly={readOnly} type="number"
               label="Year" cols="12 4" placeholder="Enter the year"
+              parse={parseNumber} format={formatNumber}
             />
             <CreditList cols="12 6" readOnly={readOnly} />
         </div>

@@ -31,10 +31,12 @@ export function submit(values, method) {
     return dispatch => {
         const id = values._id ? values._id : ''
 
-        values.month = values.month ? parseInt(values.month, 10) : null;
-        values.year = values.year ? parseInt(values.year, 10) : null;
+        // values.month = values.month ? parseInt(values.month, 10) : null;
+        // values.year = values.year ? parseInt(values.year, 10) : null;
         values.debts = values.debts || []
         values.credits = values.credits || []
+
+        console.log(values)
 
         axios[method](`${BASE_URL}/billingCycles/${id}`, values)
         .then(resp => {
