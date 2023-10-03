@@ -33,8 +33,8 @@ export function submit(values, method) {
 
         values.month = values.month ? parseInt(values.month, 10) : null;
         values.year = values.year ? parseInt(values.year, 10) : null;
-        values.debts = []
-        values.credits = []
+        values.debts = values.debts || []
+        values.credits = values.credits || []
 
         axios[method](`${BASE_URL}/billingCycles/${id}`, values)
         .then(resp => {
