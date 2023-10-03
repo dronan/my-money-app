@@ -42,6 +42,8 @@ async function post(req, res, next) {
 async function put(req, res, next) {
     const _id = new ObjectId(req.params.id);
     const data = req.body;
+    delete data._id;
+
     try {
       const options = { returnDocument: 'after' };
       const result = await coll.findOneAndUpdate({ _id }, { $set: data }, options);

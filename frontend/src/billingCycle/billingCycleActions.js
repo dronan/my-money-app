@@ -16,22 +16,30 @@ export function getList() {
 }
 
 export function create(values) {
-    
+    return submit(values, 'post')
+}
+
+export function update(values) {
+    return submit(values, 'put')
+}
+
+export function remove(values) {
+    return submit(values, 'delete')
+}
+
+export function submit(values, method) {
     return dispatch => {
+        const id = values._id ? values._id : ''
+
         values.month = values.month ? parseInt(values.month, 10) : null;
         values.year = values.year ? parseInt(values.year, 10) : null;
         values.debts = []
         values.credits = []
-    
-        axios.post(`${BASE_URL}/billingCycles`, values).then(resp => {
+
+        axios[method](`${BASE_URL}/billingCycles/${id}`, values)
+        .then(resp => {
             toastr.success('Success', 'Operation successfully executed.')
-            
-            dispatch([
-                resetForm('billingCycleForm'),
-                getList(),
-                selectTab('tabList'),
-                showTabs('tabList', 'tabCreate')
-            ])
+            dispatch(init())
         }).catch(e => {
             e.response.data.errors.forEach(error => 
                 toastr.error('Error', error.reason)
