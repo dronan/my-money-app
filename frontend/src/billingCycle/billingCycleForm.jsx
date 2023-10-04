@@ -9,12 +9,23 @@ import { init } from "./billingCycleActions";
 import labelAndInput from "../common/form/labelAndInput";
 import ItemList from "./itemList";
 import { parseNumber, formatNumber } from '../common/form/formHelpers'
+import Summary from "./summary";
 
 class BillingCycleForm extends Component {
+
+  calculateSummary() {
+    const sum = (t, v) => t + v;
+    return {
+      sumOfCredits: this.props.credits.map(c => +c.value || 0).reduce(sum),
+      sumOfDebts: this.props.debts.map(d => +d.value || 0).reduce(sum)
+    };
+  }
+
   render() {
 
     // handleSubmit is a function provided by redux-form
     const { handleSubmit, readOnly, credits, debts } = this.props;
+    const { sumOfCredits, sumOfDebts } = this.calculateSummary();
 
     return (
       <form role="form" onSubmit={handleSubmit}>
@@ -30,6 +41,7 @@ class BillingCycleForm extends Component {
               label="Year" cols="12 4" placeholder="Enter the year"
               parse={parseNumber} format={formatNumber}
             />
+            <Summary credit={sumOfCredits} debt={sumOfDebts} />
             <ItemList list={credits} field='credits' legend='Credits' cols="12 6" readOnly={readOnly} />
             <ItemList list={debts} field='debts' legend='Debts' cols="12 6" readOnly={readOnly} showStatus={true} />
         </div>
