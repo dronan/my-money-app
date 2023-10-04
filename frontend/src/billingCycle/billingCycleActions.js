@@ -30,16 +30,11 @@ export function remove(values) {
 export function submit(values, method) {
     return dispatch => {
         const id = values._id ? values._id : ''
-
-        // values.month = values.month ? parseInt(values.month, 10) : null;
-        // values.year = values.year ? parseInt(values.year, 10) : null;
-        values.debts = values.debts || []
-        values.credits = values.credits || []
-
-        console.log(values)
+        values.debts = values.debts && values.debts[0] && Object.keys(values.debts[0]).length === 0 ? [] : values.debts;
+        values.credits = values.credits && values.credits[0] && Object.keys(values.credits[0]).length === 0 ? [] : values.credits;
 
         axios[method](`${BASE_URL}/billingCycles/${id}`, values)
-        .then(resp => {
+        .then( () => {
             toastr.success('Success', 'Operation successfully executed.')
             dispatch(init())
         }).catch(e => {
@@ -51,6 +46,12 @@ export function submit(values, method) {
 }
 
 export function showUpdate(billingCycle) {
+    if (!billingCycle.credits || billingCycle.credits.length === 0) {
+        billingCycle.credits = INITIAL_VALUES.credits;
+    }
+    if (!billingCycle.debts || billingCycle.debts.length === 0) {
+        billingCycle.debts = INITIAL_VALUES.debts;
+    }
     return [
         showTabs('tabUpdate'),
         selectTab('tabUpdate'),

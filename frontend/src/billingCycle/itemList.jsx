@@ -3,8 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Grid from '../common/layout/grid'
 import { Field, arrayInsert, arrayRemove } from 'redux-form'
-import Input from '../common/form/input'
-import { parseNumber, formatNumber } from '../common/form/formHelpers'
+import Input from '../common/form/input';
 import If from '../common/operator/if'
 
 class ItemList extends Component {
@@ -25,15 +24,30 @@ class ItemList extends Component {
         const list = this.props.list || []
         return list.map((item, index) => (
             <tr key={index}>
-                <td><Field name={`${this.props.field}[${index}].name`} component={Input}
-                placeholder='Insert the name' readOnly={this.props.readOnly} /></td>
-                <td><Field name={`${this.props.field}[${index}].value`} component={Input}
-                placeholder='Insert the value' readOnly={this.props.readOnly} 
-                parse={parseNumber} format={formatNumber} /></td>
+                <td>
+                    <Field 
+                        name={`${this.props.field}[${index}].name`} 
+                        component={Input} 
+                        placeholder='Insert the name' 
+                        readOnly={this.props.readOnly} 
+                        initialValue="" />
+                </td>
+                <td>
+                    <Field 
+                        name={`${this.props.field}[${index}].value`} 
+                        component={Input} 
+                        placeholder='0.00' 
+                        readOnly={this.props.readOnly} 
+                        initialValue="" />
+                </td>
                 <If test={this.props.showStatus}>
-                <td><Field name={`${this.props.field}[${index}].status`} component={Input}
-                placeholder='Insert the status' readOnly={this.props.readOnly} 
-                /></td>
+                    <td>
+                        <Field 
+                            name={`${this.props.field}[${index}].status`} 
+                            component={Input} 
+                            placeholder='Insert the status' 
+                            readOnly={this.props.readOnly} />
+                    </td>
                 </If>
                 <td>
                     <button type='button' className='btn btn-success' onClick={() => this.add(index+1)}>
