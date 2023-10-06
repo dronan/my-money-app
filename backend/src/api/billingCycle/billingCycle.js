@@ -1,7 +1,7 @@
 const client =  require('../../config/database.js');
 let coll;
 
-console.log('Applying schema...')
+console.log('Applying BillingCycle schema...')
 
 async function run() {
   try {
@@ -29,7 +29,7 @@ async function run() {
                   required: ['name', 'value'],
                   properties: {
                     name: { bsonType: 'string' },
-                    value: { bsonType: 'number', minimum: 0 },
+                    value: { bsonType: 'number' },
                   },
                 },
               },
@@ -40,7 +40,7 @@ async function run() {
                   required: ['name', 'value'],
                   properties: {
                     name: { bsonType: 'string' },
-                    value: { bsonType: 'number', minimum: 0 },
+                    value: { bsonType: 'number' },
                     status: { bsonType: 'string', enum: ['PAYED', 'PENDING', 'SCHEDULED'] },
                   },
                 },
@@ -55,7 +55,7 @@ async function run() {
 
     coll = db.collection('BillingCycle');
   
-    console.log('Schema applied successfully');
+    console.log('BillingCycle Schema applied successfully');
   
     return coll; 
   } 
