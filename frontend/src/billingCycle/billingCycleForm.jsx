@@ -43,6 +43,7 @@ class BillingCycleForm extends Component {
             <Field name="month" component={select} readOnly={readOnly}
               label="Month" cols="12 4" placeholder="Select the month"
               parse={parseNumber} format={formatNumber}
+              value=""
               options={[
                 { value: 1, label: 'January' },
                 { value: 2, label: 'February' },
@@ -62,6 +63,7 @@ class BillingCycleForm extends Component {
                 label="Year" cols="12 4" 
                 placeholder="Select the year" 
                 options={yearOptions} 
+                value=""
                 parse={parseNumber} format={formatNumber}
               />
             <Summary credit={sumOfCredits} debt={sumOfDebts} />

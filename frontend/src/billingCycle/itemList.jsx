@@ -46,6 +46,7 @@ class ItemList extends Component {
                     <td>
                         <Field name={`${this.props.field}[${index}].status`} 
                             component={select} 
+                            value=""
                             cols=""
                             readOnly={this.props.readOnly}
                             placeholder="Insert the status"

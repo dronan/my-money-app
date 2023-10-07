@@ -47,10 +47,6 @@ async function put(req, res, next) {
     const data = req.body;
     delete data._id;
             
-    //bcrypt to encrypt email
-    const salt = bcrypt.genSaltSync();
-    data.userEmail = bcrypt.hashSync(data.userEmail, salt);
-
     try {
       const options = { returnDocument: 'after' };
       const result = await coll.findOneAndUpdate({ _id }, { $set: data }, options);

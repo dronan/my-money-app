@@ -9,8 +9,9 @@ export default ({ input, label, readOnly, options, cols, placeholder }) => (
           className="form-control"
           placeholder={placeholder}
           readOnly={readOnly}
+          value={input.value || ''} // Garanta que isso não seja undefined ou null
         >
-          <option value="" disabled selected>
+          <option value="" disabled>
             {placeholder}
           </option>
           {options.map(option => (

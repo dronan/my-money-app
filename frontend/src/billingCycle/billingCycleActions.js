@@ -49,11 +49,8 @@ export function submit(values, method) {
             toastr.success('Success', 'Operation successfully executed.')
             dispatch(init())
         }).catch(e => {
+            e.response.data.errors.forEach(error => toastr.error('Error', error.reason))
             listValues(values);
-            e.response.data.errors.forEach(error => 
-                toastr.error('Error', error.reason)
-            )
-            
         })     
     }
 }
