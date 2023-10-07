@@ -36,7 +36,7 @@ const login = async (req, res, next) => {
             const { name, email } = user;
             res.json({ name, email, token });
         } else {
-            res.status(400).send({ errors: ['Usuário/Senha inválidos'] });
+            res.status(400).send({ errors: ['User/Password invalid'] });
         }
     } catch (error) {
         sendErrorsFromDB(res, error);
@@ -57,13 +57,13 @@ const signUp = async (req, res, next) => {
     const confirmPassword = req.body.confirm_password || '';
 
     if (!email.match(emailRegex)) {
-        return res.status(400).send({ errors: ['O e-mail informado está inválido'] });
+        return res.status(400).send({ errors: ['The e-mail informed is invalid.'] });
     }
 
     if (!password.match(passwordRegex)) {
         return res.status(400).send({
             errors: [
-                'Senha precisa ter: uma letra maiúscula, uma letra minúscula, um número, uma caractere especial(@#$%) e tamanho entre 6-20.',
+                'Your password must contain: one uppercase letter, one lowercase letter, a number, a special character(@#$%) and size between 6-20.'
             ],
         });
     }
@@ -72,13 +72,13 @@ const signUp = async (req, res, next) => {
     const passwordHash = bcrypt.hashSync(password, salt);
 
     if (!bcrypt.compareSync(confirmPassword, passwordHash)) {
-        return res.status(400).send({ errors: ['Senhas não conferem.'] });
+        return res.status(400).send({ errors: ['Password does not match'] });
     }
 
     try {
         const user = await coll.findOne({ email }, { projection: { email: 1 } });
         if (user) {
-            return res.status(400).send({ errors: ['Usuário já cadastrado.'] });
+            return res.status(400).send({ errors: ['User already register.'] });
         } else {
             const newUser = await coll.insertOne({ name, email, password: passwordHash });
             res.json({ name, email });

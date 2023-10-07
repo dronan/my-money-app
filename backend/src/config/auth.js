@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const env = require('../.env');
 
 module.exports = (req, res, next) => {
-    if (req.module === 'OPTIONS') {
+    if (req.method === 'OPTIONS') {
         next();
     } else {
         const token = req.body.token || req.query.token || req.headers['authorization'];

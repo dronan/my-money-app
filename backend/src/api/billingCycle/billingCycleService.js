@@ -24,7 +24,6 @@ async function get(req, res, next) {
 // Rote to insert a billing cycle
 async function post(req, res, next) {
     try {
-        console.log(req.body)
         const result = await coll.insertOne(req.body);
         if (result.acknowledged) {
             const insertedDocument = await coll.findOne({ _id: result.insertedId });
