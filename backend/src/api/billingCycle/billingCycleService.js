@@ -1,6 +1,7 @@
 const getCollection = require('./billingCycle');
 const parseMongoError = require('../errorHandler/error');
 const ObjectId = require('mongodb').ObjectId;
+const bcrypt = require('bcrypt');
 
 // Local variable to store the collection
 let coll;
@@ -10,31 +11,34 @@ getCollection().then(collection => {
   coll = collection;
 });
 
-// Rote to get all billing cycles
+// Route to get all billing cycles
 async function get(req, res, next) {
-    try {
-      const result = await coll.find().toArray();
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ errors: [error] });
-    }
+  try {
+    const matchedRecords = await filterGetByUserEmail(req);
+    res.json(matchedRecords);
+  } catch (error) {
+    res.status(500).json({ errors: [error] });
   }
-
+}
 
 // Rote to insert a billing cycle
 async function post(req, res, next) {
-    try {
-        const result = await coll.insertOne(req.body);
+  const data = req.body;
+  data.userEmail = data.userEmail;
+
+  try {
+        const result = await coll.insertOne(data);
         if (result.acknowledged) {
             const insertedDocument = await coll.findOne({ _id: result.insertedId });
             res.json(insertedDocument);
         } else {
             throw new Error('Falha na inserção');
         }
-    } catch (error) {
+  } catch (error) {
       const parsedError = parseMongoError(error);
       res.status(500).json(parsedError);
-    }
+  }
+
 }
 
 // Route to update a billing cycle
@@ -42,6 +46,10 @@ async function put(req, res, next) {
     const _id = new ObjectId(req.params.id);
     const data = req.body;
     delete data._id;
+            
+    //bcrypt to encrypt email
+    const salt = bcrypt.genSaltSync();
+    data.userEmail = bcrypt.hashSync(data.userEmail, salt);
 
     try {
       const options = { returnDocument: 'after' };
@@ -72,20 +80,31 @@ async function deleteMethod(req, res, next) {
     }
   }
 
+
+async function filterGetByUserEmail(req) {
+  const email = req.query.userEmail;
+  const matchedRecords = await coll.find({ userEmail: email }).toArray();
+  return matchedRecords;
+}
+
 // Route to the number of billing cycles
 async function count(req, res, next) {
-    try {
-      const value = await coll.countDocuments();
-      res.json({ value });
-    } catch (error) {
-      res.status(500).json({ errors: [error] });
-    }
+  try {
+    const matchedRecords = await filterGetByUserEmail(req);
+    const value = matchedRecords.length;  // count the array elements
+    res.json({ value });
+  } catch (error) {
+    res.status(500).json({ errors: [error] });
   }
+}
   
 // Route to the summary of credits and debts
 async function summary(req, res, next) {
   try {
+      const userEmail = req.query.userEmail;
+      
       const result = await coll.aggregate([
+          { $match: { userEmail } },
           { $unwind: '$credits' },
           { $unwind: '$debts' },
           {

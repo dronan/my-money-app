@@ -22,6 +22,7 @@ async function run() {
               name: { bsonType: 'string' },
               month: { bsonType: 'int', minimum: 1, maximum: 12 },
               year: { bsonType: 'int', minimum: 1970, maximum: 2100 },
+              userEmail: { bsonType: 'string' },
               credits: {
                 bsonType: 'array',
                 items: {

@@ -20,8 +20,8 @@ async function run() {
             required: ['name', 'email', 'password'],
             properties: {
               name: { bsonType: 'string' },
-              month: { bsonType: 'string' },
-              year: { bsonType: 'string', minimum: 6, maximum: 12 },
+              email: { bsonType: 'string' },
+              password: { bsonType: 'string', minimum: 6, maximum: 12 },
               },
             },
         },

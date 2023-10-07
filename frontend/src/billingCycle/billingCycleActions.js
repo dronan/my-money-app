@@ -32,7 +32,7 @@ export function submit(values, method) {
         const id = values._id ? values._id : ''
         
         const _values = values;
-
+        
         _values.debts = values.debts && values.debts[0] && Object.keys(values.debts[0]).length === 0 ? [] : values.debts;
         _values.credits = values.credits && values.credits[0] && Object.keys(values.credits[0]).length === 0 ? [] : values.credits;
 
@@ -49,9 +49,11 @@ export function submit(values, method) {
             toastr.success('Success', 'Operation successfully executed.')
             dispatch(init())
         }).catch(e => {
+            listValues(values);
             e.response.data.errors.forEach(error => 
                 toastr.error('Error', error.reason)
             )
+            
         })     
     }
 }

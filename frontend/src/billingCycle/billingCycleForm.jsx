@@ -3,6 +3,7 @@ import { reduxForm, Field, formValueSelector } from "redux-form";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { change } from 'redux-form';
 
 import { init } from "./billingCycleActions";
 
@@ -27,7 +28,6 @@ class BillingCycleForm extends Component {
     // handleSubmit is a function provided by redux-form
     const { handleSubmit, readOnly, credits, debts } = this.props;
     const { sumOfCredits, sumOfDebts } = this.calculateSummary();
-
     // Generate array of years for example from 1970 to 2050
     const years = Array.from({ length: 81 }, (_, i) => 1970 + i);
 
@@ -67,6 +67,7 @@ class BillingCycleForm extends Component {
             <Summary credit={sumOfCredits} debt={sumOfDebts} />
             <ItemList list={credits} field='credits' legend='Credits' cols="12 6" readOnly={readOnly} />
             <ItemList list={debts} field='debts' legend='Debts' cols="12 6" readOnly={readOnly} showStatus={true} />
+            
         </div>
         <div className="box-footer">
           <button type="submit" className={`btn btn-${this.props.submitClass}`}>
@@ -87,5 +88,5 @@ const mapStateToProps = state => ({
   credits: selector(state, "credits"),
   debts: selector(state, "debts")
 });
-const mapDispatchToProps = dispatch => bindActionCreators({ init }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ init, change }, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(BillingCycleForm);
