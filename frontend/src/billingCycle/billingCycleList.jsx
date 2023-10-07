@@ -15,7 +15,7 @@ class BillingCycleList extends Component {
         return list.map(bc => (
             <tr key={bc._id}>
                 <td>{bc.name}</td>
-                <td>{bc.month}</td>
+                <td>{new Date(bc.year, bc.month - 1).toLocaleString('en-US', { month: 'long' })}</td>
                 <td>{bc.year}</td>
                 <td>
                     <button className="btn btn-warning" onClick={ () => this.props.showUpdate(bc) }>

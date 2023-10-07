@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import Grid from '../common/layout/grid'
 import { Field, arrayInsert, arrayRemove } from 'redux-form'
 import { Input, InputMoney } from '../common/form/input';
+import select from '../common/form/select';
 import If from '../common/operator/if'
 
 class ItemList extends Component {
@@ -36,17 +37,24 @@ class ItemList extends Component {
                     <Field 
                         name={`${this.props.field}[${index}].value`} 
                         component={InputMoney} 
+                        type='number'
                         placeholder='0.00' 
                         readOnly={this.props.readOnly} 
                         initialValue="" />
                 </td>
                 <If test={this.props.showStatus}>
                     <td>
-                        <Field 
-                            name={`${this.props.field}[${index}].status`} 
-                            component={Input} 
-                            placeholder='Insert the status' 
-                            readOnly={this.props.readOnly} />
+                        <Field name={`${this.props.field}[${index}].status`} 
+                            component={select} 
+                            cols=""
+                            readOnly={this.props.readOnly}
+                            placeholder="Insert the status"
+                            options={[
+                                { value: 'PAYED', label: 'PAYED' },
+                                { value: 'PENDING', label: 'PENDING' },
+                                { value: 'SCHEDULED', label: 'SCHEDULED' },
+                            ]} />
+                            
                     </td>
                 </If>
                 <td>
