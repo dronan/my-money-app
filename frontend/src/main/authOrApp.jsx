@@ -8,11 +8,13 @@ import Auth from '../auth/auth'
 import { validateToken } from '../auth/authActions'
 
 class AuthOrApp extends Component {
+  
   componentWillMount() {
     if(this.props.auth.user) {
         this.props.validateToken(this.props.auth.user.token)
     }
   }
+
   render() {
     const { user, validToken } = this.props.auth
     if(user && validToken) {
