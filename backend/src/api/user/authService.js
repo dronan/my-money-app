@@ -28,7 +28,7 @@ const login = async (req, res, next) => {
     const password = req.body.password || '';
 
     try {
-        const user = await coll.findOne({ email }, { projection: { password: 1 } });
+        const user = await coll.findOne({ email });
         if (user && bcrypt.compareSync(password, user.password)) {
             const token = jwt.sign({ ...user }, env.authSecret, {
                 expiresIn: '1 day',
@@ -68,24 +68,32 @@ const signUp = async (req, res, next) => {
         });
     }
 
-    const salt = bcrypt.genSaltSync();
-    const passwordHash = bcrypt.hashSync(password, salt);
-
-    if (!bcrypt.compareSync(confirmPassword, passwordHash)) {
-        return res.status(400).send({ errors: ['Password does not match'] });
-    }
-
-    try {
-        const user = await coll.findOne({ email }, { projection: { email: 1 } });
+    if (password !== confirmPassword) {
+        return res.status(400).send({ errors: ['Passwords do not match'] });
+      }
+      
+      const salt = bcrypt.genSaltSync();
+      const passwordHash = bcrypt.hashSync(password, salt);
+      
+      try {
+        const user = await coll.findOne({ email });
         if (user) {
-            return res.status(400).send({ errors: ['User already register.'] });
-        } else {
-            const newUser = await coll.insertOne({ name, email, password: passwordHash });
-            res.json({ name, email });
+          return res.status(409).send({ errors: ['User already registered.'] });
         }
-    } catch (error) {
+        
+        const token = jwt.sign({ ...user }, env.authSecret, {
+            expiresIn: '1 day',
+        });
+        
+        const newUser = await coll.insertOne({ name, email, password: passwordHash });
+        res.json({ name, email, token });
+      } catch (error) {
         sendErrorsFromDB(res, error);
-    }
+      }
+
+      
+
+      
 };
 
 module.exports = { login, signUp, validateToken };

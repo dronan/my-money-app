@@ -25,7 +25,7 @@ class BillingCycle extends Component {
     render() {
         return (
             <div>
-                <ContentHeader title="Ciclos de Pagamentos" small="Cadastro" />
+                <ContentHeader title="Payment Cycles" small="Register" />
                 <Content>
                     <Tabs>
                         <TabsHeader>
@@ -49,8 +49,6 @@ class BillingCycle extends Component {
                             <TabContent id="tabDelete">
                                 <Form onSubmit={this.props.remove}  readOnly={true} submitClass="danger" submitLabel="Delete" />
                             </TabContent>
-                            <TabContent id="tabPayment"><h1>Pagamentos</h1></TabContent>
-                            <TabContent id="tabSummary"><h1>Resumo</h1></TabContent>
                         </TabsContent>
                     </Tabs>
                 </Content>

@@ -30,10 +30,21 @@ export function remove(values) {
 export function submit(values, method) {
     return dispatch => {
         const id = values._id ? values._id : ''
-        values.debts = values.debts && values.debts[0] && Object.keys(values.debts[0]).length === 0 ? [] : values.debts;
-        values.credits = values.credits && values.credits[0] && Object.keys(values.credits[0]).length === 0 ? [] : values.credits;
+        
+        const _values = values;
 
-        axios[method](`${BASE_URL}/billingCycles/${id}`, values)
+        _values.debts = values.debts && values.debts[0] && Object.keys(values.debts[0]).length === 0 ? [] : values.debts;
+        _values.credits = values.credits && values.credits[0] && Object.keys(values.credits[0]).length === 0 ? [] : values.credits;
+
+        _values.debts.forEach(debt => {
+                debt.value = Number(debt.value);
+        })
+
+        _values.credits.forEach(credit => {
+            credit.value = Number(credit.value);
+        })
+
+        axios[method](`${BASE_URL}/billingCycles/${id}`, _values)
         .then( () => {
             toastr.success('Success', 'Operation successfully executed.')
             dispatch(init())
@@ -45,13 +56,28 @@ export function submit(values, method) {
     }
 }
 
-export function showUpdate(billingCycle) {
+export function listValues(billingCycle) {
     if (!billingCycle.credits || billingCycle.credits.length === 0) {
         billingCycle.credits = INITIAL_VALUES.credits;
+    } else {
+        billingCycle.credits.forEach(credit => {
+            credit.value = parseFloat(credit.value).toFixed(2);
+        })
     }
+
     if (!billingCycle.debts || billingCycle.debts.length === 0) {
         billingCycle.debts = INITIAL_VALUES.debts;
+    } else {
+        billingCycle.debts.forEach(debt => {
+            debt.value = parseFloat(debt.value).toFixed(2);
+        })
     }
+}
+
+export function showUpdate(billingCycle) {
+
+    listValues(billingCycle);
+
     return [
         showTabs('tabUpdate'),
         selectTab('tabUpdate'),
@@ -60,6 +86,8 @@ export function showUpdate(billingCycle) {
 }
 
 export function showDelete(billingCycle) {
+    listValues(billingCycle);
+
     return [
         showTabs('tabDelete'),
         selectTab('tabDelete'),
