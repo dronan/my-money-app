@@ -3,8 +3,7 @@
 ### Payments cycle project (section 12 - 15 Udemy course)
 
 ### Requirements
-- Node.js v15.4.2
-- MongoDB v5.7.0
+- Node.js, MongoDB
 
 ### Running backend
 
@@ -34,7 +33,7 @@ npm run dev
 ```bash
 cd frontend
 npm i
-npm run dev
+npm start
 ```
 
 ### Frontend Concepts:

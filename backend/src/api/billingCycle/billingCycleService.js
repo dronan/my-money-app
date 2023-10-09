@@ -97,35 +97,44 @@ async function count(req, res, next) {
 // Route to the summary of credits and debts
 async function summary(req, res, next) {
   try {
-      const userEmail = req.query.userEmail;
-      
-      const result = await coll.aggregate([
-          { $match: { userEmail } },
-          { $unwind: '$credits' },
-          { $unwind: '$debts' },
-          {
-              $group: {
-                  _id: null,
-                  totalCredit: { $sum: '$credits.value' },
-                  totalDebt: { $sum: '$debts.value' }
-              }
-          },
-          {
-              $project: {
-                  _id: 0,
-                  credit: '$totalCredit',
-                  debt: '$totalDebt'
-              }
-          }
-      ]).toArray();
+    const userEmail = req.query.userEmail;
 
-      res.json(result[0] || { credit: 0, debt: 0 });
+    // Aggregation for credit
+    const creditResult = await coll.aggregate([
+      { $match: { userEmail } },
+      { $unwind: "$credits" },
+      {
+        $group: {
+          _id: null,
+          credit: { $sum: "$credits.value" },
+        },
+      },
+    ]).toArray();
 
+    // Aggregation for debt
+    const debtResult = await coll.aggregate([
+      { $match: { userEmail } },
+      { $unwind: "$debts" },
+      {
+        $group: {
+          _id: null,
+          debt: { $sum: "$debts.value" },
+        },
+      },
+    ]).toArray();
+
+    const credit = creditResult[0]?.credit || 0;
+    const debt = debtResult[0]?.debt || 0;
+
+    res.json({ credit, debt });
   } catch (error) {
-      console.log(error); // For debugging
-      res.status(500).json({ errors: [error] });
+    console.log(error);
+    res.status(500).json({ errors: [error] });
   }
 }
+
+
+
 
   
 
